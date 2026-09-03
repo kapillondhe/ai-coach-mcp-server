@@ -2,7 +2,7 @@ from fastmcp import FastMCP
 
 from mcp_server.auth import SharedSecretVerifier
 from mcp_server.config import get_settings
-from mcp_server.tools.workouts import get_workout_history, log_workout
+from mcp_server.tools.nutrition import calculate_protein_intake
 
 
 def create_server() -> FastMCP:
@@ -10,8 +10,7 @@ def create_server() -> FastMCP:
     auth = SharedSecretVerifier(settings.mcp_auth_token) if settings.mcp_auth_token else None
 
     server = FastMCP("ai-coach-tools", auth=auth)
-    server.tool(log_workout)
-    server.tool(get_workout_history)
+    server.tool(calculate_protein_intake)
     return server
 
 

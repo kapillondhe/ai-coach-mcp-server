@@ -1,6 +1,6 @@
 # AI Coach — MCP Server
 
-Standalone MCP server exposing fitness-coaching tools (log/lookup workouts) over
+Standalone MCP server exposing fitness-coaching tools over
 streamable HTTP. Consumed by the [AI Coach backend](https://github.com/kapillondhe/ai-coach-backend)'s
 Pydantic AI coach agent as a tool provider, but has no dependency on that repo — any
 MCP client can talk to it.
@@ -47,6 +47,5 @@ mcp_server/
   auth.py        shared-secret bearer token verifier
   config.py      env-driven settings (pydantic-settings)
   tools/         one module per tool group (plain async functions)
-  data/          placeholder in-memory persistence
 tests/
 ```
