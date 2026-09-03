@@ -1,0 +1,5 @@
+pydantic-settings==2.13.0
+pytest==9.0.1
+
+# FastMCP with streamable-http server support
+fastmcp-slim[server]==4.0.2

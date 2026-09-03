@@ -1,0 +1,27 @@
+from fastmcp import FastMCP
+
+from mcp_server.auth import SharedSecretVerifier
+from mcp_server.config import get_settings
+from mcp_server.tools.workouts import get_workout_history, log_workout
+
+
+def create_server() -> FastMCP:
+    settings = get_settings()
+    auth = SharedSecretVerifier(settings.mcp_auth_token) if settings.mcp_auth_token else None
+
+    server = FastMCP("ai-coach-tools", auth=auth)
+    server.tool(log_workout)
+    server.tool(get_workout_history)
+    return server
+
+
+mcp = create_server()
+
+
+def main() -> None:
+    settings = get_settings()
+    mcp.run(transport="streamable-http", host=settings.mcp_host, port=settings.mcp_port)
+
+
+if __name__ == "__main__":
+    main()
