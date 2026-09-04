@@ -2,6 +2,7 @@ from fastmcp import FastMCP
 
 from mcp_server.auth import SharedSecretVerifier
 from mcp_server.config import get_settings
+from mcp_server.telemetry import setup_telemetry
 from mcp_server.tools.nutrition import calculate_protein_intake
 
 
@@ -19,6 +20,7 @@ mcp = create_server()
 
 def main() -> None:
     settings = get_settings()
+    setup_telemetry()
     mcp.run(transport="streamable-http", host=settings.mcp_host, port=settings.mcp_port)
 
 

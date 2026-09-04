@@ -13,6 +13,12 @@ class Settings(BaseSettings):
     # Unset (the default) disables auth entirely - fine for local dev with a single trusted caller.
     mcp_auth_token: str | None = None
 
+    # Arize Phoenix (Cloud) tracing. Unset phoenix_api_key disables telemetry entirely.
+    phoenix_api_key: str | None = None
+    phoenix_collector_endpoint: str = "https://app.phoenix.arize.com"
+    phoenix_project_name: str = "ai-coach"
+    otel_service_name: str = "ai-coach-mcp-server"
+
 
 @lru_cache
 def get_settings() -> Settings:

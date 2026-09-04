@@ -3,3 +3,6 @@ pytest==9.0.1
 
 # FastMCP with streamable-http server support
 fastmcp-slim[server]==4.0.2
+
+# Tracing (mcp_server/telemetry.py) - exports to Arize Phoenix; no-ops when PHOENIX_API_KEY is unset
+arize-phoenix-otel==0.17.1
