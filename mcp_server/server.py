@@ -3,6 +3,7 @@ from fastmcp import FastMCP
 from mcp_server.auth import SharedSecretVerifier
 from mcp_server.config import get_settings
 from mcp_server.telemetry import setup_telemetry
+from mcp_server.tools.knowledge_base import search_knowledge_base
 from mcp_server.tools.nutrition import calculate_protein_intake
 
 
@@ -12,6 +13,7 @@ def create_server() -> FastMCP:
 
     server = FastMCP("ai-coach-tools", auth=auth)
     server.tool(calculate_protein_intake)
+    server.tool(search_knowledge_base)
     return server
 
 

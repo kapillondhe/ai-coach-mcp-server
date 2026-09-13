@@ -6,3 +6,7 @@ fastmcp-slim[server]==4.0.2
 
 # Tracing (mcp_server/telemetry.py) - exports to Arize Phoenix; no-ops when PHOENIX_API_KEY is unset
 arize-phoenix-otel==0.17.1
+
+# Knowledge-base vector search (mcp_server/rag/) - local ONNX embeddings via fastembed,
+# no API key or torch dependency
+qdrant-client[fastembed]==1.19.0

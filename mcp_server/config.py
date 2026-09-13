@@ -19,6 +19,13 @@ class Settings(BaseSettings):
     phoenix_project_name: str = "ai-coach"
     otel_service_name: str = "ai-coach-mcp-server"
 
+    # Qdrant (mcp_server/rag/vector_store.py) backing the knowledge-base search tool.
+    # Local dev default assumes `docker compose up -d`. qdrant_api_key is required for
+    # Qdrant Cloud and unused for a local/self-hosted instance.
+    qdrant_url: str = "http://localhost:6333"
+    qdrant_api_key: str | None = None
+    qdrant_collection: str = "coaching_kb"
+
 
 @lru_cache
 def get_settings() -> Settings:
