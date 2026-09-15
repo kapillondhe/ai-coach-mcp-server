@@ -12,6 +12,12 @@ python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
+
+# Local Qdrant, needed by the knowledge-base search tool (mcp_server/rag/)
+docker compose up -d
+
+# Ingest knowledge_base/*.md into Qdrant; re-run whenever that content changes
+python -m scripts.ingest_knowledge_base
 ```
 
 ## Run
@@ -46,6 +52,16 @@ mcp_server/
   server.py      FastMCP instance + tool registration
   auth.py        shared-secret bearer token verifier
   config.py      env-driven settings (pydantic-settings)
-  tools/         one module per tool group (plain async functions)
+  tools/         one module per tool group (plain async functions):
+                   nutrition.py       - calculate_protein_intake
+                   knowledge_base.py  - search_knowledge_base (RAG over Qdrant)
+  rag/           VectorStore wrapper around QdrantClient (mcp_server/rag/vector_store.py)
+knowledge_base/  curated .md source content for the RAG tool, one file per topic,
+                 grouped by domain (nutrition/, exercises/, training/, physiotherapy/)
+scripts/         ingest_knowledge_base.py - chunks knowledge_base/ into Qdrant
 tests/
 ```
+
+Current tools exposed: `calculate_protein_intake` (pure sports-nutrition math) and
+`search_knowledge_base` (semantic search over the curated knowledge base, embedded
+locally via fastembed — no external embedding API/key needed).
