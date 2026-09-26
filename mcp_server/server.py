@@ -5,6 +5,11 @@ from mcp_server.config import get_settings
 from mcp_server.telemetry import setup_telemetry
 from mcp_server.tools.knowledge_base import search_knowledge_base
 from mcp_server.tools.nutrition import calculate_protein_intake
+from mcp_server.tools.zones import (
+    calculate_heart_rate_zones,
+    calculate_power_zones,
+    calculate_swim_pace_zones,
+)
 
 
 def create_server() -> FastMCP:
@@ -14,6 +19,9 @@ def create_server() -> FastMCP:
     server = FastMCP("ai-coach-tools", auth=auth)
     server.tool(calculate_protein_intake)
     server.tool(search_knowledge_base)
+    server.tool(calculate_heart_rate_zones)
+    server.tool(calculate_power_zones)
+    server.tool(calculate_swim_pace_zones)
     return server
 
 
