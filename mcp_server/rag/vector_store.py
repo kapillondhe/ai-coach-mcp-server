@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import threading
 import uuid
 from functools import lru_cache
 from typing import Any
@@ -7,6 +8,8 @@ from typing import Any
 from qdrant_client import QdrantClient, models
 
 from mcp_server.config import get_settings
+
+_EMBED_LOCK = threading.Lock()
 
 # Pinned so ingestion and search always embed with the same model — vectors from
 # different models aren't comparable. 384-dim, 512-token max sequence length.
@@ -49,7 +52,8 @@ class VectorStore:
             )
             for chunk in chunks
         ]
-        self._client.upsert(collection_name=self._collection, points=points)
+        with _EMBED_LOCK:
+            self._client.upsert(collection_name=self._collection, points=points)
 
     def delete_stale_sources(self, current_sources: set[str]) -> None:
         """Remove chunks whose source file no longer exists under knowledge_base/."""
@@ -91,13 +95,14 @@ class VectorStore:
             if domain
             else None
         )
-        result = self._client.query_points(
-            collection_name=self._collection,
-            query=models.Document(text=query, model=EMBEDDING_MODEL),
-            query_filter=query_filter,
-            limit=top_k,
-            score_threshold=score_threshold,
-        )
+        with _EMBED_LOCK:
+            result = self._client.query_points(
+                collection_name=self._collection,
+                query=models.Document(text=query, model=EMBEDDING_MODEL),
+                query_filter=query_filter,
+                limit=top_k,
+                score_threshold=score_threshold,
+            )
         return [
             {
                 "text": point.payload["text"],
